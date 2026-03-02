@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import Link from "next/link";
 
 type WrongItem = {
   questionId: string;
@@ -13,16 +14,24 @@ type WrongItem = {
 
 const KEY = "ssat_wrongbook";
 
-export default function WrongBookPage() {
-  const [items, setItems] = useState<WrongItem[]>([]);
+function loadItems(): WrongItem[] {
+  if (typeof window === "undefined") return [];
+  const raw = window.localStorage.getItem(KEY);
+  return raw ? JSON.parse(raw) : [];
+}
 
-  function load() {
-    const raw = localStorage.getItem(KEY);
-    setItems(raw ? JSON.parse(raw) : []);
-  }
+export default function WrongBookPage() {
+  const [items, setItems] = useState<WrongItem[]>(loadItems);
 
   useEffect(() => {
-    load();
+    function handleStorage(event: StorageEvent) {
+      if (event.key === KEY) {
+        setItems(loadItems());
+      }
+    }
+
+    window.addEventListener("storage", handleStorage);
+    return () => window.removeEventListener("storage", handleStorage);
   }, []);
 
   function clearAll() {
@@ -32,9 +41,9 @@ export default function WrongBookPage() {
 
   return (
     <main style={{ padding: 24, fontFamily: "Arial", maxWidth: 900 }}>
-      <a href="/" style={{ textDecoration: "none" }}>
+      <Link href="/" style={{ textDecoration: "none" }}>
         ← Home
-      </a>
+      </Link>
 
       <h1 style={{ fontSize: 28, marginTop: 16 }}>Wrong Book</h1>
 
@@ -61,7 +70,7 @@ export default function WrongBookPage() {
             .reverse()
             .map((it, idx) => (
               <div
-                key={idx}
+                key={`${it.questionId}-${it.timestamp}-${idx}`}
                 style={{
                   padding: 14,
                   border: "1px solid #ddd",
@@ -73,7 +82,7 @@ export default function WrongBookPage() {
                 </div>
                 <div style={{ fontSize: 18 }}>{it.stem}</div>
                 <div style={{ marginTop: 8 }}>
-                  Your: {String.fromCharCode(65 + it.userAnswerIndex)} | Correct:{" "}
+                  Your: {String.fromCharCode(65 + it.userAnswerIndex)} | Correct: {" "}
                   {String.fromCharCode(65 + it.correctAnswerIndex)}
                 </div>
               </div>

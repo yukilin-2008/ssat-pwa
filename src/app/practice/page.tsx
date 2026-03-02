@@ -1,6 +1,7 @@
 "use client";
 
 import { useMemo, useState } from "react";
+import Link from "next/link";
 import { QUESTIONS, Question } from "../../data/questions";
 type Result = "idle" | "correct" | "wrong";
 
@@ -74,12 +75,12 @@ export default function PracticePage() {
   return (
     <main style={{ padding: 24, fontFamily: "Arial", maxWidth: 760 }}>
       <div style={{ display: "flex", justifyContent: "space-between" }}>
-        <a href="/" style={{ textDecoration: "none" }}>
+        <Link href="/" style={{ textDecoration: "none" }}>
           ← Home
-        </a>
-        <a href="/wrongbook" style={{ textDecoration: "none" }}>
+        </Link>
+        <Link href="/wrongbook" style={{ textDecoration: "none" }}>
           Wrong Book →
-        </a>
+        </Link>
       </div>
 
       <h1 style={{ fontSize: 28, marginTop: 16 }}>Practice</h1>
