@@ -1,7 +1,7 @@
 export default function Home() {
   return (
     <main style={{ padding: 24, fontFamily: "Arial" }}>
-      <h1 style={{ fontSize: 32, marginBottom: 8 }}>SSAT Practice</h1>
+      <h1 style={{ fontSize: 32, marginBottom: 8 }}>SSAT Practice for Grade 3-7</h1>
       <p style={{ fontSize: 18, marginTop: 0 }}>
         Tap “Start Practice” to begin.
       </p>
